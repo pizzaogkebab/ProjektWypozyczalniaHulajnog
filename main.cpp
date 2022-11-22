@@ -5,6 +5,12 @@
 
 using namespace std;
 
+string hashowanie(string haslo){
+    for(int i = 0; i < haslo.length(); i++)
+        haslo[i] += 3;
+    return haslo;
+}
+
 class Uzytkownik
 {
     public:
@@ -25,7 +31,7 @@ class Uzytkownik
 
         fstream plik;
         plik.open("uzytkownicy.txt", ios::out | ios::app);
-        plik << email << endl << imie << endl << nazwisko << endl << login << endl << haslo << endl << "======="<<endl;
+        plik << email << endl << imie << endl << nazwisko << endl << login << endl << hashowanie(haslo) << endl << "======="<<endl;
         plik.close();
     }
     bool logowanie()
@@ -56,7 +62,7 @@ class Uzytkownik
                     do{
                         cout << "Podaj haslo: ";
                         cin >> haslozklaw;
-                    }while(haslozklaw != haslo);
+                    }while(hashowanie(haslozklaw) != haslo);
                     return true;
                 }
                 else
@@ -74,11 +80,12 @@ class Uzytkownik
 };
 
 class Hulajnoga{
+
+public:
     string typ_hulajnogi;
     int predkosc, waga, stanBat;
     float odl;
 
-public:
     void dodaj_hulajnoge(string typ, int bat, float odleglosc)
     {
         typ_hulajnogi = typ;
@@ -103,7 +110,7 @@ public:
             odl = odleglosc;
         }
     }
-    void pokaz_hulajnoge()
+    void pokaz_hulajnoge() const
     {
         cout << "========================="<<endl;
         cout << "Hulajnoga typu "<<typ_hulajnogi<<endl;
@@ -145,28 +152,33 @@ int main() {
                     case 1:
                     {
                         cout <<"WYBIERZ RODZAJ HULAJNOGI"<<endl;
-                        cout <<"1.Wszystkie dotepne hulajnogi" <<endl;
-                        cout <<"2.Hulajnogi 'STANDARD'"<<endl;
-                        cout <<"3.Hulajnogi 'SPEED'"<<endl;
-                        cout <<"4.Hulajnogi 'terenowe'"<<endl;
+                        cout <<"1.Hulajnogi 'STANDARD'"<<endl;
+                        cout <<"2.Hulajnogi 'SPEED'"<<endl;
+                        cout <<"3.Hulajnogi 'terenowe'"<<endl;
                         int wybor_hulajnogi = 0;
+                        float pref_odl;
                         cin >> wybor_hulajnogi;
+                        cout <<"W jakiej odległości od siebie chcesz zobaczyć hulajnogi: ";
+                        cin >> pref_odl;
                         cout << "WYBRANE HULAJNOGI W TWOJEJ OKOLICY"<<endl;
                         switch(wybor_hulajnogi){
+
                             case 1:
-                            case 2:
                             {
                                 cout<<"Hulajnogi 'STANDARD': "<<endl;
                                 Hulajnoga S[10];
                                 for(int i = 0; i < 10; i++)
                                 {
                                     int random_1 = (rand() % 95) + 5;
-                                    float random_2 = (rand() % 500) / 10.0;
+                                    float random_2 = ((rand() % 50) + 0.2) / 10.0;
                                     S[i].dodaj_hulajnoge("standard", random_1, random_2);
-                                    S[i].pokaz_hulajnoge();
+                                    if(random_2 <= pref_odl)
+                                        S[i].pokaz_hulajnoge();
+
                                 }
+                                break;
                             }
-                            case 3:
+                            case 2:
                             {
                                 cout<<"Hulajnogi 'SPEED': "<<endl;
                                 Hulajnoga SP[10];
@@ -175,10 +187,12 @@ int main() {
                                     int random_1 = (rand() % 95) + 5;
                                     float random_2 = (rand() % 500) / 10.0;
                                     SP[i].dodaj_hulajnoge("speed", random_1, random_2);
-                                    SP[i].pokaz_hulajnoge();
+                                    if(random_2 <= pref_odl)
+                                        SP[i].pokaz_hulajnoge();
                                 }
+                                break;
                             }
-                            case 4:
+                            case 3:
                             {
                                 cout<<"Hulajnogi 'TERENOWA': "<<endl;
                                 Hulajnoga T[10];
@@ -187,13 +201,14 @@ int main() {
                                     int random_1 = (rand() % 95) + 5;
                                     float random_2 = (rand() % 500) / 10.0;
                                     T[i].dodaj_hulajnoge("teren", random_1, random_2);
-                                    T[i].pokaz_hulajnoge();
+                                    if(random_2 <= pref_odl)
+                                        T[i].pokaz_hulajnoge();
                                 }
+                                break;
                             }
                         }
                     }
                 }
-
             }
             else
                 cout <<"Nieznany uzytkownik";
