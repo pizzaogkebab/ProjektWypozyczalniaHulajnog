@@ -1,7 +1,11 @@
 #include <iostream>
 #include <fstream>
-#include<cstdlib>
+#include <cstdlib>
 #include <time.h>
+#include <string>
+#include <limits> //chyba nie trzeba
+#include <typeinfo> // do testow
+#include <vector> // do zmiany elementow w pliku m.in. do doladowania konta
 
 using namespace std;
 
@@ -31,7 +35,7 @@ class Uzytkownik
 
         fstream plik;
         plik.open("uzytkownicy.txt", ios::out | ios::app);
-        plik << email << endl << imie << endl << nazwisko << endl << login << endl << hashowanie(haslo) << endl << "======="<<endl;
+        plik << email << endl << imie << endl << nazwisko << endl << login << endl << hashowanie(haslo) << endl << "0" << endl << "=======" << endl;
         plik.close();
     }
     bool logowanie()
@@ -68,7 +72,7 @@ class Uzytkownik
                 else
                 {
                     if(licznik == nrlini)
-                        nrlini +=6;
+                        nrlini +=7;
                 }
                 licznik++;
             }
@@ -122,6 +126,7 @@ public:
     }
 
 };
+
 int main() {
     srand(time(0));
     cout << "1.Rejestracja nowego konta"<<endl;
@@ -145,7 +150,8 @@ int main() {
                 cout << "1. Wypozycz hulajnoge"
                 << endl <<"2. Pokaz liste dostepnych hulajnog"
                 << endl <<"3. Pokaz historie wypozyczen"
-                << endl <<"4. Ustawienia"<<endl;
+                << endl <<"4. Saldo konta"
+                << endl <<"5. Ustawienia"<<endl;
                 int wybor_menu_2;
                 cin >> wybor_menu_2;
                 switch(wybor_menu_2){
@@ -207,6 +213,115 @@ int main() {
                                 break;
                             }
                         }
+                    }
+                    case 2:
+                    {
+                        break;
+                    }
+                    case 3:
+                    {
+                        break;
+                    }
+                    case 4:
+                    {
+                        cout << "1. Sprawdz stan konta" << endl;
+                        cout << "2. Doladuj konto" << endl;
+                        int wybor_menu_saldo;
+                        cin >> wybor_menu_saldo;
+                        switch (wybor_menu_saldo){
+                            case 1:
+                            {                              
+                                fstream plik;
+                                plik.open("uzytkownicy.txt", ios::in);
+                                
+                                if (plik.good() == true){
+                                    string slinia;
+                                    while(getline(plik,slinia)){
+                                        if (slinia == u1.login){
+                                            break;
+                                        }
+                                    }
+                                    getline(plik,slinia);
+                                    getline(plik,slinia);
+                                    cout << "Aktualne saldo to: " << slinia << endl;
+                                    //cout << typeid(slinia).name();
+                                }
+                                plik.close();
+                                break;
+                                
+                            }
+                            case 2:
+                            {
+                                double doladowanie;
+                                cout << "Podaj kwote na jaka chcesz doladowac konto: ";
+                                while (true){
+                                    cin >> doladowanie;
+                                    if (doladowanie>0){
+                                        break;
+                                    }
+                                    cout << "Podaj kwote doladowania jeszcze raz: ";
+
+                                }
+
+                                fstream plik;
+                                plik.open("uzytkownicy.txt", ios::in);
+                                string saldos;
+                                int snrlini = 1;
+                                if (plik.good() == true){
+                                    string slinia;
+                                    while(getline(plik,slinia)){
+                                        if (slinia == u1.login){
+                                            break;
+                                        }
+                                        snrlini++;
+                                    }
+                                    getline(plik,slinia);
+                                    getline(plik,slinia);
+                                    snrlini ++;
+                                    saldos = slinia;
+                                }
+                                plik.close();
+
+                                double saldo = stod(saldos);
+                                saldo += doladowanie;
+
+                                string saldodts = to_string(saldo);
+
+                                fstream przepisanie;
+
+                                przepisanie.open("uzytkownicy.txt");
+
+                                vector<string> tempplik;
+                                string templinie;
+
+                                while (getline(przepisanie,templinie)){
+                                    tempplik.push_back(templinie);
+                                }
+                                
+                                przepisanie.close();
+
+                                
+                                ofstream pliks;
+
+                                pliks.open("uzytkownicy.txt");
+                                
+                                for (int i = 0; i < tempplik.size(); i++) {
+                                    if (i != snrlini){
+                                        pliks << tempplik[i] << endl;
+                                    } else {
+                                        pliks << saldodts << endl;
+                                    }
+                                }
+                                
+                                pliks.close();
+                                cout << "Doladowanie konta zakonczone pomyslnie!" << endl;
+
+                            }
+                        }
+                    }
+                    case 5:
+                    {
+                        break;
                     }
                 }
             }
