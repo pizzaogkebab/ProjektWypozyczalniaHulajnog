@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -233,10 +234,12 @@ int main() {
                       
                       if (plik.good() == true){
                         string slinia;
+                        int snrlini = 1;
                         while(getline(plik,slinia)){
-                          if (slinia == u1.login){
+                          if (slinia == u1.login && snrlini%7 == 4){
                             break;
                           }
+                          snrlini++;
                         }
                         getline(plik,slinia);
                         getline(plik,slinia);
@@ -265,7 +268,7 @@ int main() {
                       if (plik.good() == true){
                         string slinia;
                         while(getline(plik,slinia)){
-                          if (slinia == u1.login){
+                          if (slinia == u1.login && snrlini%7 == 4){
                             break;
                           }
                           snrlini++;
