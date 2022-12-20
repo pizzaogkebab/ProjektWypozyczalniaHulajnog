@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -7,126 +6,10 @@
 #include <limits> //chyba nie trzeba
 #include <typeinfo> // do testow
 #include <vector> // do zmiany elementow w pliku m.in. do doladowania konta
+#include "Uzytkownik.h"
+#include "Hulajnoga.h"
 
 using namespace std;
-
-string hashowanie(string haslo){
-    for(int i = 0; i < haslo.length(); i++)
-        haslo[i] += 3;
-    return haslo;
-}
-
-class Uzytkownik
-{
-    public:
-    string email, imie, nazwisko, login, haslo;
-    void dodawanie_uzytkownika()
-    {
-        cout << "REJESTRACJA NOWEGO KONTA"<<endl;
-        cout << "Podaj swoj email: ";
-        cin >> email;
-        cout <<"Podaj Imie: ";
-        cin >> imie;
-        cout << "Podaj Nazwisko: ";
-        cin >> nazwisko;
-        cout << "Podaj login: ";
-        cin >> login;
-        cout << "Ustaw haslo: ";
-        cin >> haslo;
-
-        fstream plik;
-        plik.open("uzytkownicy.txt", ios::out | ios::app);
-        plik << email << endl << imie << endl << nazwisko << endl << login << endl << hashowanie(haslo) << endl << "0" << endl << "=======" << endl;
-        plik.close();
-    }
-    bool logowanie()
-    {
-        string loginzklaw;
-        string haslozklaw;
-
-        fstream plik;
-        plik.open("uzytkownicy.txt", ios::in);
-
-        if (plik.good() == true){
-            string linia;
-            int licznik = 1;
-            int nrlini = 4;
-            cout << "Podaj login: ";
-            cin >> loginzklaw;
-            while(getline(plik,linia))
-            {
-                if(licznik == nrlini)
-                {
-                    login = linia;
-                }
-                if(login == loginzklaw)
-                {
-                    getline(plik,linia);
-                    haslo = linia;
-                    cout << "Uzytkownik: " << login<<endl;
-                    do{
-                        cout << "Podaj haslo: ";
-                        cin >> haslozklaw;
-                    }while(hashowanie(haslozklaw) != haslo);
-                    return true;
-                }
-                else
-                {
-                    if(licznik == nrlini)
-                        nrlini +=7;
-                }
-                licznik++;
-            }
-            plik.close();
-            return false;
-        }
-        return false;
-    }
-};
-
-class Hulajnoga{
-
-public:
-    string typ_hulajnogi;
-    int predkosc, waga, stanBat;
-    float odl;
-
-    void dodaj_hulajnoge(string typ, int bat, float odleglosc)
-    {
-        typ_hulajnogi = typ;
-        if(typ == "standard") {
-            predkosc = 30;
-            waga = 100;
-            stanBat = bat;
-            odl = odleglosc;
-        }
-        else if(typ == "speed")
-        {
-            predkosc = 45;
-            waga = 90;
-            stanBat = bat;
-            odl = odleglosc;
-        }
-        else if(typ == "teren")
-        {
-            predkosc = 25;
-            waga = 110;
-            stanBat = bat;
-            odl = odleglosc;
-        }
-    }
-    void pokaz_hulajnoge() const
-    {
-        cout << "========================="<<endl;
-        cout << "Hulajnoga typu "<<typ_hulajnogi<<endl;
-        cout << "maksymalna predkosc: "<< predkosc <<" km/h "<<endl;
-        cout << "maksymalna waga pasazera: " << waga << "kg" << endl;
-        cout << "Stan bateri pojazdu: " << stanBat << "%" <<endl;
-        cout << "Odleglosc od ciebie: " << odl << "km" <<endl;
-        cout << "========================="<<endl<<endl;
-    }
-
-};
 
 int main() {
     srand(time(0));
@@ -253,7 +136,7 @@ int main() {
                     {
                       double doladowanie;
                       cout << "Podaj kwote na jaka chcesz doladowac konto: ";
-                      while (true){
+                      while(true){
                         cin >> doladowanie;
                         if (doladowanie>0){
                           break;
