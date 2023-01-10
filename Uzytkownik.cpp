@@ -1,9 +1,9 @@
 #include "Uzytkownik.h"
 #include <fstream>
 #include <iostream>
+#include <vector> // do zmiany elementow w pliku m.in. do doladowania konta
 
 using namespace std;
-
 
 string Uzytkownik::hashowanie(string haslo){
     for(int i = 0; i < haslo.length(); i++)
@@ -27,7 +27,7 @@ void Uzytkownik::dodawanie_uzytkownika()
     //wprowadzenie loginu i jednoczesne sprawdzenie czy taki użytkownik już nie występuje
     while (true){
         int licznik = 1;
-        int nrlini = 4;  //indeks lini w którym znajduje się pierwszy login
+        int nrlini = 1;  //indeks lini w którym znajduje się pierwszy login
         cout << "Podaj login: ";
         cin >> login;
         fstream plik_odczyt;
@@ -58,9 +58,10 @@ void Uzytkownik::dodawanie_uzytkownika()
     cout << "Ustaw haslo: ";
     cin >> haslo;
 
+    saldo = 0;
     fstream plik_zapis;
     plik_zapis.open("uzytkownicy.txt", ios::out | ios::app);
-    plik_zapis << email << endl << imie << endl << nazwisko << endl << login << endl << hashowanie(haslo) << endl << "0" << endl << "=======" << endl;
+    plik_zapis << login<< endl << hashowanie(haslo) << endl << email << endl << imie << endl << nazwisko << endl << saldo << endl << "=======" << endl;
     plik_zapis.close();
 
 }
@@ -78,7 +79,7 @@ bool Uzytkownik::logowanie()
     if (plik.good() == true){
         string linia;
         int licznik = 1;
-        int nrlini = 4;
+        int nrlini = 1;
         cout << "Podaj login: ";
         cin >> loginzklaw;
         while(getline(plik,linia))
@@ -96,6 +97,14 @@ bool Uzytkownik::logowanie()
                     cout << "Podaj haslo: ";
                     cin >> haslozklaw;
                 }while(Uzytkownik::hashowanie(haslozklaw) != haslo);
+                getline(plik,linia);
+                email = linia;
+                getline(plik,linia);
+                imie = linia;
+                getline(plik,linia);
+                nazwisko = linia;
+                getline(plik,linia);
+                saldo = stod(linia);
                 return true;
             }
             else
@@ -110,3 +119,75 @@ bool Uzytkownik::logowanie()
     }
     return false;
 }
+
+
+void Uzytkownik::stan_konta()
+{
+    cout << "Aktualne saldo to: " << saldo << " zl "<<endl;
+}
+
+
+void Uzytkownik::zmiana_salda() {
+    fstream plik;
+    plik.open("uzytkownicy.txt", ios::in);
+    string saldos;
+    int snrlini = 1;
+    if (plik.good() == true){
+        string slinia;
+        while(getline(plik,slinia)){
+            if (slinia == login && snrlini%7 == 1){
+                break;
+            }
+            snrlini++;
+        }
+        snrlini += 4;
+    }
+    plik.close();
+
+    string saldodts = to_string(saldo);
+
+    fstream przepisanie;
+
+    przepisanie.open("uzytkownicy.txt");
+
+    vector<string> tempplik;
+
+    string templinie;
+
+    while (getline(przepisanie, templinie)) {
+        tempplik.push_back(templinie);
+    }
+
+    przepisanie.close();
+
+    ofstream pliks;
+
+    pliks.open("uzytkownicy.txt");
+    string slinia;
+
+        for (int i = 0; i < tempplik.size(); i++) {
+            if (i != snrlini) {
+                pliks << tempplik[i] << endl;
+            } else {
+                pliks << saldodts << endl;
+            }
+        }
+
+        pliks.close();
+
+    }
+
+
+    void Uzytkownik::doladowanie(){
+        double doladowanie;
+        cout << "Podaj kwote na jaka chcesz doladowac konto: ";
+        while (true) {
+            cin >> doladowanie;
+            if (doladowanie > 0) {
+                break;
+            }
+            cout << "Podaj kwote doladowania jeszcze raz: ";
+        }
+        saldo += doladowanie;
+        zmiana_salda();
+    }

@@ -1,15 +1,38 @@
 #include <iostream>
-#include <fstream>
 #include <cstdlib>
 #include <time.h>
 #include <string>
 #include <limits> //chyba nie trzeba
 #include <typeinfo> // do testow
-#include <vector> // do zmiany elementow w pliku m.in. do doladowania konta
 #include "Uzytkownik.h"
 #include "Hulajnoga.h"
 
 using namespace std;
+
+
+float zaokraglij(float liczba)
+{
+    float wartosc = (int)(liczba * 100 + .5);
+    return (float)wartosc / 100;
+}
+
+bool sprawdz_blik(int kod){
+    if(kod > 999999){
+        return false;
+    }
+    string kods = to_string(kod);
+    if(kods.size() != 6)
+    {
+        return false;
+    }
+    if(kods == "000000")
+    {
+        return false;
+    }
+    return true;
+}
+
+
 
 int main() {
     srand(time(0));
@@ -17,19 +40,25 @@ int main() {
     cout << "2.Logowanie"<<endl;
     int wybor_logowanie = 0;
     cin >> wybor_logowanie;
+    system("cls");
     switch(wybor_logowanie)
+
     {
+        //rejestracja
         case 1: {
-            Uzytkownik u1;
-            u1.dodawanie_uzytkownika();
-            cout << "Pzechodzimy do logowania" << endl;
+            Uzytkownik user1;
+            user1.dodawanie_uzytkownika();
+            system("cls");
+            cout << "Zarejestrowano pomyślnie. Pzechodzimy do logowania" << endl;
         }
 
-        case 2:
+        //logowanie
+        case 2: {
             cout << "Logowanie" << endl;
-            Uzytkownik u1;
-            if(u1.logowanie()) {
-                cout << "Witamy na koncie " << u1.login << " :)" << endl;
+            Uzytkownik user_log;
+            if(user_log.logowanie()) {
+                system("cls");
+                cout << "Witamy na koncie " << user_log.login << " :)" << endl;
                 while (true){
                     cout << "\nWybierz co chcesz teraz zrobic" << endl;
                     cout << "1. Wypozycz hulajnoge"
@@ -40,65 +69,77 @@ int main() {
                     << endl <<"0. Wyjscie" << endl;
                     int wybor_menu_2;
                     cin >> wybor_menu_2;
+                    system("cls");
                     if (wybor_menu_2 == 1){
                         cout <<"WYBIERZ RODZAJ HULAJNOGI"<<endl;
                         cout <<"1.Hulajnogi 'STANDARD'"<<endl;
                         cout <<"2.Hulajnogi 'SPEED'"<<endl;
-                        cout <<"3.Hulajnogi 'terenowe'"<<endl;
-                        int wybor_hulajnogi = 0;
-                        float pref_odl;
+                        cout <<"3.Hulajnogi 'TEREN'"<<endl;
+                        int wybor_hulajnogi;
                         cin >> wybor_hulajnogi;
-                        cout <<"W jakiej odległości od siebie chcesz zobaczyć hulajnogi: ";
-                        cin >> pref_odl;
                         cout << "WYBRANE HULAJNOGI W TWOJEJ OKOLICY"<<endl;
+                        Standard s;
+                        Speed sp;
+                        Teren t;
+                        Hulajnoga *wsk;
                         switch(wybor_hulajnogi){
                             case 1:
                             {
-                                cout<<"Hulajnogi 'STANDARD': "<<endl;
-                                Hulajnoga S[10];
-                                for(int i = 0; i < 10; i++)
-                                {
-                                    int random_1 = (rand() % 95) + 5;
-                                    float random_2 = ((rand() % 50) + 0.2) / 10.0;
-                                    S[i].dodaj_hulajnoge("standard", random_1, random_2);
-                                    if(random_2 <= pref_odl)
-                                        S[i].pokaz_hulajnoge();
-
-                                }
+                                wsk = &s;
                                 break;
                             }
                             case 2:
                             {
-                                cout<<"Hulajnogi 'SPEED': "<<endl;
-                                Hulajnoga SP[10];
-                                for(int i = 0; i < 10; i++)
-                                {
-                                    int random_1 = (rand() % 95) + 5;
-                                    float random_2 = (rand() % 500) / 10.0;
-                                    SP[i].dodaj_hulajnoge("speed", random_1, random_2);
-                                    if(random_2 <= pref_odl)
-                                        SP[i].pokaz_hulajnoge();
-                                }
+                                wsk = &sp;
                                 break;
                             }
                             case 3:
                             {
-                                cout<<"Hulajnogi 'TERENOWA': "<<endl;
-                                Hulajnoga T[10];
-                                for(int i = 0; i < 10; i++)
-                                {
-                                    int random_1 = (rand() % 95) + 5;
-                                    float random_2 = (rand() % 500) / 10.0;
-                                    T[i].dodaj_hulajnoge("teren", random_1, random_2);
-                                    if(random_2 <= pref_odl)
-                                        T[i].pokaz_hulajnoge();
-                                }
+                                wsk = &t;
                                 break;
                             }
+                            default:
+                                cout << "Nie ma takiej opcji" << endl;
+
+                        }
+                        cout << "--- Hulajnoga wybranego typu najbliżej ciebie --- "<< endl;
+                        wsk -> pokaz_hulajnoge();
+                        cout << "Czy chcesz wypożyczyć te hulajnoge? (Y/N): ";
+                        char czy_wypozyczyc;
+                        cin >> czy_wypozyczyc;
+                        if(czy_wypozyczyc == 'Y' or czy_wypozyczyc == 'y')
+                        {
+                            cout << "Maksymalny czas wypozyczenia tej hulajnogi: ";
+                            cout << zaokraglij(wsk->maks_zasieg()) << " min " << endl;
+                            cout << "Wypozyczanie..." << endl;
+                            cout << "Wpisz czas wypożyczenia (w minutach): ";
+                            int czas_wypozyczenia;
+                            cin >> czas_wypozyczenia;
+                            double koszt_wyp = wsk -> koszt(czas_wypozyczenia);
+                            cout << "Koszt wypożyczenia wynosi: " << koszt_wyp << endl;
+                            cout << "Porsze wpisac szesciocyfrowy numer BLIK: ";
+                            int blik;
+                            cin >> blik;
+                            if(sprawdz_blik(blik))
+                            {
+                                user_log.saldo -= koszt_wyp;
+                                user_log.zmiana_salda();
+                                cout << "Transakcja zakonczona pomyslnie" << endl;
+                            }
+
+                        }
+                        else if (czy_wypozyczyc == 'n' or czy_wypozyczyc == 'N')
+                        {
+                            cout << "ok" << endl;
+                        }
+                        else
+                        {
+                           cout << "nie rozumiem polecenia ;(";
                         }
                     }
                     if (wybor_menu_2 == 2){
-                      continue;
+                        cout << "------- NASZA OFERTA -------" << endl << endl;
+
                     }
                     if (wybor_menu_2 == 3){
                       continue;
@@ -112,91 +153,12 @@ int main() {
                             cin >> wybor_menu_saldo;
                             if (wybor_menu_saldo == 1)
                             {
-                                fstream plik;
-                                plik.open("uzytkownicy.txt", ios::in);
-
-                                if (plik.good() == true){
-                                    string slinia;
-                                    int snrlini = 1;
-                                    while(getline(plik,slinia)){
-                                        if (slinia == u1.login && snrlini%7 == 4){
-                                            break;
-                                        }
-                                        snrlini++;
-                                    }
-                                    getline(plik,slinia);
-                                    getline(plik,slinia);
-                                    cout << "Aktualne saldo to: " << slinia << endl;
-                                }
-                                plik.close();
-                                continue;;
-
+                                user_log.stan_konta();
                             }
                             if (wybor_menu_saldo == 2)
                             {
-                                double doladowanie;
-                                cout << "Podaj kwote na jaka chcesz doladowac konto: ";
-                                while(true){
-                                    cin >> doladowanie;
-                                    if (doladowanie>0){
-                                        break;
-                                    }
-                                    cout << "Podaj kwote doladowania jeszcze raz: ";
-                                }
-
-                                fstream plik;
-                                plik.open("uzytkownicy.txt", ios::in);
-                                string saldos;
-                                int snrlini = 1;
-                                if (plik.good() == true){
-                                      string slinia;
-                                      while(getline(plik,slinia)){
-                                          if (slinia == u1.login && snrlini%7 == 4){
-                                              break;
-                                          }
-                                          snrlini++;
-                                }
-                                    getline(plik,slinia);
-                                    getline(plik,slinia);
-                                    snrlini ++;
-                                    saldos = slinia;
-                                }
-                                plik.close();
-
-                                double saldo = stod(saldos);
-                                saldo += doladowanie;
-
-                                string saldodts = to_string(saldo);
-
-                                fstream przepisanie;
-
-                                przepisanie.open("uzytkownicy.txt");
-
-                                vector<string> tempplik;
-                                string templinie;
-
-                                while (getline(przepisanie,templinie)){
-                                    tempplik.push_back(templinie);
-                                }
-
-                                przepisanie.close();
-
-                                ofstream pliks;
-
-                                pliks.open("uzytkownicy.txt");
-
-                                for (int i = 0; i < tempplik.size(); i++) {
-                                    if (i != snrlini){
-                                        pliks << tempplik[i] << endl;
-                                    }
-                                    else
-                                    {
-                                        pliks << saldodts << endl;
-                                    }
-                                }
-
-                                pliks.close();
-                                cout << "Doladowanie konta zakonczone pomyslnie!" << endl;
+                                user_log.doladowanie();
+                                cout << "Doladowanie zakonczone pomyslnie";
                                 continue;
                             }
                             if (wybor_menu_saldo == 9){
@@ -220,5 +182,10 @@ int main() {
             else
                 cout <<"Nieznany uzytkownik";
             break;
+        }
+        default:
+        cout << "Nie ma takiego wyboru" << endl;
+
     }
+
 }
