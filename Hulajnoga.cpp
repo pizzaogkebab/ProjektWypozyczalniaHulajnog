@@ -4,14 +4,19 @@
 using namespace  std;
 
 
-void Hulajnoga::pokaz_hulajnoge()
-{
+void Hulajnoga::prezentacja_hulajnogi() {
     cout << "========================="<<endl;
-    cout << "Typ wybranej hulajnogi: " << typ_hulajnogi << endl;
+    cout << "Typ hulajnogi: " << typ_hulajnogi << endl;
     cout << "Maksymalna predkosc pojazdu: " << predkosc << " km/h" << endl;
     cout << "Maksymalna waga pasażera: " << waga << " kg" << endl;
+}
+
+void Hulajnoga::pokaz_hulajnoge()
+{
+    Hulajnoga::prezentacja_hulajnogi();
     cout << "Stan bateri pojazdu: " << stanBat << " %" <<endl;
     cout << "Odleglosc od ciebie: " << odleglosc << " km" <<endl;
+    cout << "========================="<<endl;
 }
 
 double Hulajnoga::maks_zasieg()
@@ -41,6 +46,11 @@ Standard::Standard(int pred, int w)
 Standard::~Standard()
 {}
 
+void Standard::prezentacja_hulajnogi()
+{
+    Hulajnoga::prezentacja_hulajnogi();
+}
+
 void Standard::pokaz_hulajnoge()
 {
     Hulajnoga::pokaz_hulajnoge();
@@ -68,6 +78,11 @@ Speed::Speed(int pred, int w){
 
 Speed::~Speed()
 {}
+
+void Speed::prezentacja_hulajnogi()
+{
+    Hulajnoga::prezentacja_hulajnogi();
+}
 
 void Speed::pokaz_hulajnoge()
 {
@@ -97,6 +112,11 @@ Teren::Teren(int pred, int w){
 
 Teren::~Teren()
 {}
+
+void Teren::prezentacja_hulajnogi()
+{
+    Hulajnoga::prezentacja_hulajnogi();
+}
 
 void Teren::pokaz_hulajnoge()
 {

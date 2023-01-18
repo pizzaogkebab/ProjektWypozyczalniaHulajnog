@@ -9,9 +9,10 @@ public:
     int stanBat, predkosc, waga;
     double cena;
     float odleglosc;
-    virtual void pokaz_hulajnoge();
-    virtual double maks_zasieg();
-    virtual double koszt(int czas);
+    virtual void prezentacja_hulajnogi();
+    virtual void pokaz_hulajnoge() = 0;
+    virtual double maks_zasieg() = 0;
+    virtual double koszt(int czas) = 0;
 
 };
 
@@ -19,6 +20,7 @@ class Standard : public Hulajnoga{
 public:
     Standard(int = 40, int = 95);
     ~Standard();
+    void prezentacja_hulajnogi();
     void pokaz_hulajnoge();
     double maks_zasieg();
     double koszt(int czas);
@@ -29,6 +31,7 @@ class Speed : public Hulajnoga{
 public:
     Speed(int = 60, int = 90);
     ~Speed();
+    void prezentacja_hulajnogi();
     void pokaz_hulajnoge();
     double maks_zasieg();
     double koszt(int czas);
@@ -38,6 +41,7 @@ class Teren : public Hulajnoga{
 public:
     Teren(int = 35, int = 100);
     ~Teren();
+    void prezentacja_hulajnogi();
     void pokaz_hulajnoge();
     double maks_zasieg();
     double koszt(int czas);
