@@ -1,9 +1,13 @@
+//codepage:ąćęłńóśżźĄĆĘŁŃÓŚŻŹ
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
+#include <Windows.h>
+#include <unistd.h>
 #include <string>
 #include <limits> //chyba nie trzeba
 #include <typeinfo> // do testow
+#include <conio.h>
 #include "Uzytkownik.h"
 #include "Hulajnoga.h"
 
@@ -14,178 +18,270 @@ float zaokraglij(float liczba)
 {
     float wartosc = (int)(liczba * 100 + .5);
     return (float)wartosc / 100;
+
 }
 
-bool sprawdz_blik(int kod){
-    if(kod > 999999){
-        return false;
-    }
-    string kods = to_string(kod);
-    if(kods.size() != 6)
+bool sprawdz_blik(string &kod){
+
+    if(kod.size() != 6)
     {
         return false;
     }
-    if(kods == "000000")
+    if(kod == "000000")
     {
         return false;
+    }
+    for(int i = 0; i < 6; i++){
+        if(int(kod[i]) < 48 or int(kod[i]) > 57)
+        {
+            return false;
+        }
     }
     return true;
 }
 
+void ladowanie(string slowo){
+    cout << slowo <<", proszę czekać ";
+    usleep(350000);
+    for(int i= 0; i < 3; i++){
+        cout << '.';
+        usleep(450000);
+    }
+    system("cls");
+}
 
 
 int main() {
-    srand(time(0));
-    cout << "1.Rejestracja nowego konta"<<endl;
-    cout << "2.Logowanie"<<endl;
-    int wybor_logowanie = 0;
-    cin >> wybor_logowanie;
+    system("chcp 65001");// zmiana kodowania na utf-8 --> polskie znaki
     system("cls");
-    switch(wybor_logowanie)
-
-    {
-        //rejestracja
-        case 1: {
-            Uzytkownik user1;
-            user1.dodawanie_uzytkownika();
-            system("cls");
-            cout << "Zarejestrowano pomyślnie. Pzechodzimy do logowania" << endl;
-        }
-
-        //logowanie
-        case 2: {
-            cout << "Logowanie" << endl;
-            Uzytkownik user_log;
-            if(user_log.logowanie()) {
+    srand(time(0));
+    bool wylogowanie = false;
+    char wybor_logowanie = '3';
+    while(wybor_logowanie != '0'){
+        cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
+        cout <<"----------------REJESTRACJA/LOGOWANIE-----------------"<<endl<<endl;
+        cout << "1.Rejestracja nowego konta"<<endl;
+        cout << "2.Logowanie"<<endl;
+        cout << "0.Zakończ"<<endl;
+        cin >> wybor_logowanie;
+        system("cls");
+        switch(wybor_logowanie) {
+            //rejestracja
+            case '1': {
+                cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
+                cout <<"------------REJESTRACJA NOWEGO UŻYTKOWNIKA------------"<<endl<<endl;
+                Uzytkownik user_rej;
+                user_rej.dodawanie_uzytkownika();
                 system("cls");
+                cout << "Zarejestrowano pomyślnie. Pzechodzimy do logowania" << endl;
+            }
+
+                //logowanie
+            case '2': {
+                cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
+                cout <<"------------LOGOWANIE NA KONTO UŻYTKOWNIKA------------"<<endl<<endl;
+                Uzytkownik user_log;
+                while (true) {
+                    if (user_log.logowanie()) { //funkcja sprawdzająca poprawność logowania
+                        cout << "Zalogowano pomyślnie" << endl;
+                        system("cls");
+                        ladowanie("Ładowanie");
+                        break;
+                    } else {
+                        cout << "Nie istnieje taki użytkownik. Spróbuj jeszcze raz" << endl << endl;
+                    }
+                }
+                cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
+                cout <<"---------------------MENU GŁÓWNE----------------------"<<endl<<endl;
                 cout << "Witamy na koncie " << user_log.login << " :)" << endl;
-                while (true){
+                while (true) {
                     cout << "\nWybierz co chcesz teraz zrobic" << endl;
-                    cout << "1. Wypozycz hulajnoge"
-                    << endl <<"2. Pokaz liste dostepnych hulajnog"
-                    << endl <<"3. Pokaz historie wypozyczen"
-                    << endl <<"4. Saldo konta"
-                    << endl <<"5. Ustawienia"
-                    << endl <<"0. Wyjscie" << endl;
-                    int wybor_menu_2;
+                    cout << "1. Wypożycz hulajnoge"
+                         << endl << "2. Pokaż listę dostępnych hulajnog"
+                         << endl << "3. Pokaż historię wypożyczeń"
+                         << endl << "4. Saldo konta"
+                         << endl << "5. Ustawienia"
+                         << endl << "0. Wyjście" << endl;
+                    char wybor_menu_2;
                     cin >> wybor_menu_2;
                     system("cls");
-                    if (wybor_menu_2 == 1){
-                        cout <<"WYBIERZ RODZAJ HULAJNOGI"<<endl;
-                        cout <<"1.Hulajnogi 'STANDARD'"<<endl;
-                        cout <<"2.Hulajnogi 'SPEED'"<<endl;
-                        cout <<"3.Hulajnogi 'TEREN'"<<endl;
-                        int wybor_hulajnogi;
-                        cin >> wybor_hulajnogi;
-                        cout << "WYBRANE HULAJNOGI W TWOJEJ OKOLICY"<<endl;
+                    if (wybor_menu_2 == '1') {
                         Standard s;
                         Speed sp;
                         Teren t;
-                        Hulajnoga *wsk;
-                        switch(wybor_hulajnogi){
-                            case 1:
-                            {
-                                wsk = &s;
-                                break;
+                        Hulajnoga *wsk = nullptr;
+                        while(true){
+                            cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
+                            cout <<"---------MENU WYBORU HULAJNÓG ELEKTRYCZNYCH-----------"<<endl<<endl;
+                            cout << "1.Hulajnogi 'STANDARD'" << endl;
+                            cout << "2.Hulajnogi 'SPEED'" << endl;
+                            cout << "3.Hulajnogi 'TEREN'" << endl;
+                            char wybor_hulajnogi;
+                            cin >> wybor_hulajnogi;
+                            switch (wybor_hulajnogi) {
+                                case '1': {
+                                    wsk = &s;
+                                    break;
+                                }
+                                case '2': {
+                                    wsk = &sp;
+                                    break;
+                                }
+                                case '3': {
+                                    wsk = &t;
+                                    break;
+                                }
                             }
-                            case 2:
-                            {
-                                wsk = &sp;
-                                break;
-                            }
-                            case 3:
-                            {
-                                wsk = &t;
-                                break;
-                            }
-                            default:
-                                cout << "Nie ma takiej opcji" << endl;
 
+
+                            if(wsk == nullptr){
+                                system("cls");
+                                cout << "Nie ma takiej opcji. Spróbuj jeszcze raz"<<endl;
+                            }
+                            else {
+                                break;
+                            }
                         }
-                        cout << "--- Hulajnoga wybranego typu najbliżej ciebie --- "<< endl;
-                        wsk -> pokaz_hulajnoge();
-                        cout << "Czy chcesz wypożyczyć te hulajnoge? (Y/N): ";
+                        cout << "--- Hulajnoga wybranego typu najbliżej ciebie --- " << endl;
+                        wsk->pokaz_hulajnoge();
+                        cout << "Czy chcesz wypożyczyć te hulajnogę? (Y/N): ";
                         char czy_wypozyczyc;
                         cin >> czy_wypozyczyc;
-                        if(czy_wypozyczyc == 'Y' or czy_wypozyczyc == 'y')
-                        {
-                            cout << "Maksymalny czas wypozyczenia tej hulajnogi: ";
+                        if (czy_wypozyczyc == 'Y' or czy_wypozyczyc == 'y') {
+                            cout << "Maksymalny czas wypożyczenia tej hulajnogi: ";
                             cout << zaokraglij(wsk->maks_zasieg()) << " min " << endl;
-                            cout << "Wypozyczanie..." << endl;
                             cout << "Wpisz czas wypożyczenia (w minutach): ";
                             int czas_wypozyczenia;
                             cin >> czas_wypozyczenia;
-                            double koszt_wyp = wsk -> koszt(czas_wypozyczenia);
+                            double koszt_wyp = wsk->koszt(czas_wypozyczenia);
                             cout << "Koszt wypożyczenia wynosi: " << koszt_wyp << endl;
                             cout << "Porsze wpisac szesciocyfrowy numer BLIK: ";
-                            int blik;
+                            string blik;
                             cin >> blik;
-                            if(sprawdz_blik(blik))
+                            if (sprawdz_blik(blik)) {
+                                if(user_log.saldo >= koszt_wyp) {
+                                    user_log.saldo -= koszt_wyp;
+                                    user_log.zmiana_salda();
+                                    cout << "Transakcja zakonczona pomyslnie" << endl;
+                                    ladowanie("Wypożyczanie");
+                                }
+                                else{
+                                    cout << "Nie posiadasz takiej kwoty na koncie. \n"
+                                            "Doładuj je i spróbuj ponownie"<<endl;
+                                    sleep(2);
+                                }
+                            }
+                            else
                             {
-                                user_log.saldo -= koszt_wyp;
-                                user_log.zmiana_salda();
-                                cout << "Transakcja zakonczona pomyslnie" << endl;
+                                system("cls");
+                                cout <<"Wprowadzony kod blik jest niepoprawny."<<endl;
+                                ladowanie("Przerywanie transakcji");
                             }
 
-                        }
-                        else if (czy_wypozyczyc == 'n' or czy_wypozyczyc == 'N')
-                        {
+
+                        } else if (czy_wypozyczyc == 'n' or czy_wypozyczyc == 'N') {
                             cout << "ok" << endl;
-                        }
-                        else
-                        {
-                           cout << "nie rozumiem polecenia ;(";
+                        } else {
+                            system("cls");
+                            cout << "Nie rozumiem polecenia ;("<<endl;
+                            cout << "Anulowanie zamówienia" << endl;
+                            ladowanie("Wracanie do głównego menu");
                         }
                     }
-                    if (wybor_menu_2 == 2){
-                        cout << "------- NASZA OFERTA -------" << endl << endl;
+                    else if (wybor_menu_2 == '2') {
+                        Hulajnoga *wsk_p;
+                        Standard sp;
+                        Speed spp;
+                        Teren tp;
+                        cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
+                        cout <<"---------------------NASZA OFERTA---------------------"<<endl<<endl;
+                        wsk_p = &sp;
+                        wsk_p->prezentacja_hulajnogi();
+                        cout << "=========================" << endl << endl;
+                        wsk_p = &spp;
+                        wsk_p->prezentacja_hulajnogi();
+                        cout << "=========================" << endl << endl;
+                        wsk_p = &tp;
+                        wsk_p->prezentacja_hulajnogi();
+                        cout << "=========================" << endl << endl;
+                        cout << "Nacisnij cokolwiek aby kontunuowac";
+
+                        char wait = _getch();
+                        system("cls");
+
 
                     }
-                    if (wybor_menu_2 == 3){
-                      continue;
+                    else if (wybor_menu_2 == '3') {
+                        continue;
                     }
-                    if (wybor_menu_2 == 4){
-                        while (true){
+                    else if (wybor_menu_2 == '4') {
+                        while (true) {
+                            system("cls");
+                            cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
+                            cout <<"---------------PANEL ZARZĄDZANIA SALDEM---------------"<<endl<<endl;
                             cout << "\n1. Sprawdz stan konta" << endl;
                             cout << "2. Doladuj konto" << endl;
                             cout << "9. Powrot" << endl;
                             int wybor_menu_saldo;
                             cin >> wybor_menu_saldo;
-                            if (wybor_menu_saldo == 1)
-                            {
+                            if (wybor_menu_saldo == 1) {
+                                system("cls");
+                                cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
+                                cout <<"---------------PANEL ZARZĄDZANIA SALDEM---------------"<<endl<<endl;
                                 user_log.stan_konta();
+                                cout <<endl<<"W celu ochrony twoich danych ta wiadomość zniknie za 5 s";
+                                sleep(5);
+
                             }
-                            if (wybor_menu_saldo == 2)
-                            {
+                            if (wybor_menu_saldo == 2) {
                                 user_log.doladowanie();
                                 cout << "Doladowanie zakonczone pomyslnie";
                                 continue;
                             }
-                            if (wybor_menu_saldo == 9){
+                            if (wybor_menu_saldo == 9) {
+                                system("cls");
                                 break;
-                            }
-                            else
-                            {
+                            } else {
                                 continue;
                             }
                         }
                     }
-                    if (wybor_menu_2 == 5){
-                        continue;
+                    else if (wybor_menu_2 == '5') {
+                        int wybor_ustawienia;
+                        cout << "1.Zmien haslo" << endl;
+                        cin >> wybor_ustawienia;
+                        switch (wybor_ustawienia) {
+                            case 1: {
+                                user_log.zmiana_hasla();
+                            }
+                        }
                     }
-                    if (wybor_menu_2 == 0){
+                    else if (wybor_menu_2 == '0') {
+                        wylogowanie = true;
                         break;
+                    }
+                    else
+                    {
+                        cout << "Nie ma takiej opcji. Spróbuj jeszcze raz"<<endl;
                     }
                 }
 
-            }
-            else
-                cout <<"Nieznany uzytkownik";
-            break;
-        }
-        default:
-        cout << "Nie ma takiego wyboru" << endl;
 
-    }
+            }
+            case'0':{
+                if(wylogowanie){
+                    ladowanie("Wylogowywanie");
+                }
+                else {
+                    ladowanie("Zamykanie aplikacji");
+                    cout << "Do zobaczenia." << endl;
+                }
+                usleep(1200000);
+                break;
+            }
+            default:
+                cout << "Nie ma takiego wyboru. Spróbuj ponownie" << endl;
+            }
+        }
 
 }

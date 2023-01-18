@@ -11,6 +11,22 @@ string Uzytkownik::hashowanie(string haslo){
     return haslo;
 }
 
+bool sprawdz_doladowanie(string &kwota){
+    if(kwota.length() < 1){
+        return false;
+    }
+    for(int i = 0; i < kwota.length(); i++){
+        if (int(kwota[i]) < 48 or int(kwota[i]) > 57) {
+            if(int(kwota[i]) == 46){
+                continue;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
 void Uzytkownik::dodawanie_uzytkownika()
 {
@@ -179,15 +195,87 @@ void Uzytkownik::zmiana_salda() {
 
 
     void Uzytkownik::doladowanie(){
-        double doladowanie;
+        string doladowanie;
         cout << "Podaj kwote na jaka chcesz doladowac konto: ";
         while (true) {
             cin >> doladowanie;
-            if (doladowanie > 0) {
+            if (sprawdz_doladowanie(doladowanie)) {
                 break;
             }
             cout << "Podaj kwote doladowania jeszcze raz: ";
         }
-        saldo += doladowanie;
+        saldo += stod(doladowanie);
         zmiana_salda();
     }
+
+    void Uzytkownik::zmiana_hasla() {
+        system("cls");
+        string stare_haslo;
+        string nowe_haslo;
+        while(true) {
+            cout << "Podaj aktualne haslo: ";
+            cin >> stare_haslo;
+            if(hashowanie(stare_haslo) != this -> haslo)
+            {
+                cout << "Podales niepoprawne haslo"<<endl;
+            }
+            else{
+                cout << "Podane haslo jest poprawne"<<endl<<endl;
+                break;
+            }
+
+        }
+        cout << "Podaj nowe haslo:";
+        cin >> nowe_haslo;
+
+        this -> haslo = hashowanie(nowe_haslo);
+
+        fstream plik;
+        plik.open("uzytkownicy.txt", ios::in);
+        string saldos;
+        int snrlini = 1;
+        if (plik.good() == true){
+            string slinia;
+            while(getline(plik,slinia)){
+                if (slinia == login && snrlini%7 == 1){
+                    break;
+                }
+                snrlini++;
+            }
+
+        }
+        plik.close();
+
+        string saldodts = haslo;
+
+        fstream przepisanie;
+
+        przepisanie.open("uzytkownicy.txt");
+
+        vector<string> tempplik;
+
+        string templinie;
+
+        while (getline(przepisanie, templinie)) {
+            tempplik.push_back(templinie);
+        }
+
+        przepisanie.close();
+
+        ofstream pliks;
+
+        pliks.open("uzytkownicy.txt");
+        string slinia;
+
+        for (int i = 0; i < tempplik.size(); i++) {
+            if (i != snrlini) {
+                pliks << tempplik[i] << endl;
+            } else {
+                pliks << saldodts << endl;
+            }
+        }
+
+        pliks.close();
+
+    }
+

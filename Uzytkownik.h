@@ -15,5 +15,6 @@ public:
     void stan_konta();
     void doladowanie();
     void zmiana_salda();
+    void zmiana_hasla();
 };
 #endif //UZYTKOWNIK_H
