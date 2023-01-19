@@ -1,4 +1,3 @@
-//codepage:ąćęłńóśżźĄĆĘŁŃÓŚŻŹ
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
@@ -21,6 +20,7 @@ float zaokraglij(float liczba)
 
 }
 
+//funkcja sprawdzająca poprawność wprowadzonego kodu blik
 bool sprawdz_blik(string &kod){
 
     if(kod.size() != 6)
@@ -40,6 +40,7 @@ bool sprawdz_blik(string &kod){
     return true;
 }
 
+//funkcja symulująca ładowanie
 void ladowanie(string slowo){
     cout << slowo <<", proszę czekać ";
     usleep(350000);
@@ -57,6 +58,7 @@ int main() {
     srand(time(0));
     bool wylogowanie = false;
     char wybor_logowanie = '3';
+    //MENU LOGOWANIA
     while(wybor_logowanie != '0'){
         cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
         cout <<"----------------REJESTRACJA/LOGOWANIE-----------------"<<endl<<endl;
@@ -76,7 +78,7 @@ int main() {
                 cout << "Zarejestrowano pomyślnie. Pzechodzimy do logowania" << endl;
             }
 
-                //logowanie
+            //logowanie
             case '2': {
                 cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
                 cout <<"------------LOGOWANIE NA KONTO UŻYTKOWNIKA------------"<<endl<<endl;
@@ -91,10 +93,12 @@ int main() {
                         cout << "Nie istnieje taki użytkownik. Spróbuj jeszcze raz" << endl << endl;
                     }
                 }
-                cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
-                cout <<"---------------------MENU GŁÓWNE----------------------"<<endl<<endl;
-                cout << "Witamy na koncie " << user_log.login << " :)" << endl;
+                //MENU GŁÓWNE
                 while (true) {
+                    system("cls");
+                    cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
+                    cout <<"---------------------MENU GŁÓWNE----------------------"<<endl<<endl;
+                    cout << "Witamy na koncie " << user_log.login << " :)" << endl;
                     cout << "\nWybierz co chcesz teraz zrobic" << endl;
                     cout << "1. Wypożycz hulajnoge"
                          << endl << "2. Pokaż listę dostępnych hulajnog"
@@ -105,6 +109,7 @@ int main() {
                     char wybor_menu_2;
                     cin >> wybor_menu_2;
                     system("cls");
+                    //MENU WYBORU HULAJNOGI
                     if (wybor_menu_2 == '1') {
                         Standard s;
                         Speed sp;
@@ -133,7 +138,6 @@ int main() {
                                 }
                             }
 
-
                             if(wsk == nullptr){
                                 system("cls");
                                 cout << "Nie ma takiej opcji. Spróbuj jeszcze raz"<<endl;
@@ -150,9 +154,18 @@ int main() {
                         if (czy_wypozyczyc == 'Y' or czy_wypozyczyc == 'y') {
                             cout << "Maksymalny czas wypożyczenia tej hulajnogi: ";
                             cout << zaokraglij(wsk->maks_zasieg()) << " min " << endl;
-                            cout << "Wpisz czas wypożyczenia (w minutach): ";
                             int czas_wypozyczenia;
-                            cin >> czas_wypozyczenia;
+                            while(true) {
+                                cout << "Wpisz czas wypożyczenia (w minutach): ";
+                                cin >> czas_wypozyczenia;
+                                if(czas_wypozyczenia <= wsk->maks_zasieg()){
+                                    break;
+                                }
+                                else{
+                                    cout << "Nie można wypożyczyć tego modelu na tak długo"<<endl;
+                                    cout << "Maksymalny czas wypożyczenia wynosi: "<<wsk->maks_zasieg()<<endl;
+                                }
+                            }
                             double koszt_wyp = wsk->koszt(czas_wypozyczenia);
                             cout << "Koszt wypożyczenia wynosi: " << koszt_wyp << endl;
                             cout << "Porsze wpisac szesciocyfrowy numer BLIK: ";
@@ -188,6 +201,7 @@ int main() {
                             ladowanie("Wracanie do głównego menu");
                         }
                     }
+                    //WYŚWIETLANIE OFERTY
                     else if (wybor_menu_2 == '2') {
                         Hulajnoga *wsk_p;
                         Standard sp;
@@ -206,7 +220,7 @@ int main() {
                         cout << "=========================" << endl << endl;
                         cout << "Nacisnij cokolwiek aby kontunuowac";
 
-                        char wait = _getch();
+                        char wait = _getch(); //czeka na nacisniecie klawisza żeby przejśc do menu głównego
                         system("cls");
 
 
@@ -214,6 +228,7 @@ int main() {
                     else if (wybor_menu_2 == '3') {
                         continue;
                     }
+                    //ZARZĄDZANIE FINANSAMI
                     else if (wybor_menu_2 == '4') {
                         while (true) {
                             system("cls");
@@ -224,6 +239,7 @@ int main() {
                             cout << "9. Powrot" << endl;
                             int wybor_menu_saldo;
                             cin >> wybor_menu_saldo;
+                            //sprawdzenie stanu konta
                             if (wybor_menu_saldo == 1) {
                                 system("cls");
                                 cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
@@ -233,33 +249,47 @@ int main() {
                                 sleep(5);
 
                             }
+                            //doładowanie konta
                             if (wybor_menu_saldo == 2) {
                                 user_log.doladowanie();
                                 cout << "Doladowanie zakonczone pomyslnie";
                                 continue;
                             }
+                            //wyjście do menu główngo
                             if (wybor_menu_saldo == 9) {
                                 system("cls");
                                 break;
-                            } else {
+                            }
+                            // błędnie wprowadzony argument
+                            else{
                                 continue;
                             }
                         }
                     }
+                    //ustawienia
                     else if (wybor_menu_2 == '5') {
-                        int wybor_ustawienia;
+                        cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
+                        cout <<"----------------------USTAWIENIA----------------------"<<endl<<endl;
+                        char wybor_ustawienia;
                         cout << "1.Zmien haslo" << endl;
                         cin >> wybor_ustawienia;
                         switch (wybor_ustawienia) {
-                            case 1: {
+                            case '1': {
                                 user_log.zmiana_hasla();
                             }
+                            default:{
+                                cout << "Nie rozumiem polecenia" <<endl;
+                                sleep(1);
+                            }
+
                         }
                     }
+                    //wylogowanie
                     else if (wybor_menu_2 == '0') {
                         wylogowanie = true;
                         break;
                     }
+                    //błędny input w menu głównym
                     else
                     {
                         cout << "Nie ma takiej opcji. Spróbuj jeszcze raz"<<endl;

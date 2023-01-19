@@ -18,18 +18,18 @@ public:
 
 class Standard : public Hulajnoga{
 public:
-    Standard(int = 40, int = 95);
+    explicit Standard(int = 40, int = 95);
     ~Standard();
-    void prezentacja_hulajnogi();
-    void pokaz_hulajnoge();
-    double maks_zasieg();
-    double koszt(int czas);
+    void prezentacja_hulajnogi() override;
+    void pokaz_hulajnoge() override;
+    double maks_zasieg() override;
+    double koszt(int czas) override;
 };
 
 
 class Speed : public Hulajnoga{
 public:
-    Speed(int = 60, int = 90);
+    explicit Speed(int = 60, int = 90);
     ~Speed();
     void prezentacja_hulajnogi();
     void pokaz_hulajnoge();
@@ -39,7 +39,7 @@ public:
 
 class Teren : public Hulajnoga{
 public:
-    Teren(int = 35, int = 100);
+    explicit Teren(int = 35, int = 100);
     ~Teren();
     void prezentacja_hulajnogi();
     void pokaz_hulajnoge();
