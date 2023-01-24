@@ -13,7 +13,6 @@ public:
     virtual void pokaz_hulajnoge() = 0;
     virtual double maks_zasieg() = 0;
     virtual double koszt(int czas) = 0;
-
 };
 
 class Standard : public Hulajnoga{
