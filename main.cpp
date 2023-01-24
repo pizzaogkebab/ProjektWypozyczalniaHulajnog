@@ -75,7 +75,7 @@ int main() {
                 Uzytkownik user_rej;
                 user_rej.dodawanie_uzytkownika();
                 system("cls");
-                cout << "Zarejestrowano pomyślnie. Pzechodzimy do logowania" << endl;
+                cout << "Zarejestrowano pomyślnie. Przechodzimy do logowania" << endl;
             }
 
             //logowanie
@@ -99,9 +99,9 @@ int main() {
                     cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
                     cout <<"---------------------MENU GŁÓWNE----------------------"<<endl<<endl;
                     cout << "Witamy na koncie " << user_log.login << " :)" << endl;
-                    cout << "\nWybierz co chcesz teraz zrobic" << endl;
-                    cout << "1. Wypożycz hulajnoge"
-                         << endl << "2. Pokaż listę dostępnych hulajnog"
+                    cout << "\nWybierz co chcesz teraz zrobić" << endl;
+                    cout << "1. Wypożycz hulajnogę"
+                         << endl << "2. Pokaż listę dostępnych hulajnóg"
                          << endl << "3. Pokaż historię wypożyczeń"
                          << endl << "4. Saldo konta"
                          << endl << "5. Ustawienia"
@@ -146,9 +146,9 @@ int main() {
                                 break;
                             }
                         }
-                        cout << "--- Hulajnoga wybranego typu najbliżej ciebie --- " << endl;
+                        cout << "--- Hulajnoga wybranego typu najbliżej Ciebie --- " << endl;
                         wsk->pokaz_hulajnoge();
-                        cout << "Czy chcesz wypożyczyć te hulajnogę? (Y/N): ";
+                        cout << "Czy chcesz wypożyczyć tę hulajnogę? (Y/N): ";
                         char czy_wypozyczyc;
                         cin >> czy_wypozyczyc;
                         if (czy_wypozyczyc == 'Y' or czy_wypozyczyc == 'y') {
@@ -168,14 +168,14 @@ int main() {
                             }
                             double koszt_wyp = wsk->koszt(czas_wypozyczenia);
                             cout << "Koszt wypożyczenia wynosi: " << koszt_wyp << endl;
-                            cout << "Porsze wpisac szesciocyfrowy numer BLIK: ";
+                            cout << "Proszę wpisać sześciocyfrowy kod BLIK: ";
                             string blik;
                             cin >> blik;
                             if (sprawdz_blik(blik)) {
                                 if(user_log.saldo >= koszt_wyp) {
                                     user_log.saldo -= koszt_wyp;
                                     user_log.zmiana_salda();
-                                    cout << "Transakcja zakonczona pomyslnie" << endl;
+                                    cout << "Transakcja zakończona pomyślnie" << endl;
                                     ladowanie("Wypożyczanie");
                                 }
                                 else{
@@ -187,7 +187,7 @@ int main() {
                             else
                             {
                                 system("cls");
-                                cout <<"Wprowadzony kod blik jest niepoprawny."<<endl;
+                                cout <<"Wprowadzony kod BLIK jest niepoprawny."<<endl;
                                 ladowanie("Przerywanie transakcji");
                             }
 
@@ -218,7 +218,7 @@ int main() {
                         wsk_p = &tp;
                         wsk_p->prezentacja_hulajnogi();
                         cout << "=========================" << endl << endl;
-                        cout << "Nacisnij cokolwiek aby kontunuowac";
+                        cout << "Naciśnij cokolwiek aby kontynuować";
 
                         char wait = _getch(); //czeka na nacisniecie klawisza żeby przejśc do menu głównego
                         system("cls");
@@ -234,9 +234,9 @@ int main() {
                             system("cls");
                             cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
                             cout <<"---------------PANEL ZARZĄDZANIA SALDEM---------------"<<endl<<endl;
-                            cout << "\n1. Sprawdz stan konta" << endl;
-                            cout << "2. Doladuj konto" << endl;
-                            cout << "9. Powrot" << endl;
+                            cout << "\n1. Sprawdź stan konta" << endl;
+                            cout << "2. Doładuj konto" << endl;
+                            cout << "9. Powrót" << endl;
                             int wybor_menu_saldo;
                             cin >> wybor_menu_saldo;
                             //sprawdzenie stanu konta
@@ -252,7 +252,7 @@ int main() {
                             //doładowanie konta
                             if (wybor_menu_saldo == 2) {
                                 user_log.doladowanie();
-                                cout << "Doladowanie zakonczone pomyslnie";
+                                cout << "Doładowanie zakończone pomyślnie";
                                 continue;
                             }
                             //wyjście do menu główngo
@@ -271,7 +271,7 @@ int main() {
                         cout <<"------WYPOŻYCZALNIA HULAJNÓG ELEKTRYCZNYCH SPEEDX-----"<<endl;
                         cout <<"----------------------USTAWIENIA----------------------"<<endl<<endl;
                         char wybor_ustawienia;
-                        cout << "1.Zmien haslo" << endl;
+                        cout << "1.Zmień hasło" << endl;
                         cin >> wybor_ustawienia;
                         switch (wybor_ustawienia) {
                             case '1': {
