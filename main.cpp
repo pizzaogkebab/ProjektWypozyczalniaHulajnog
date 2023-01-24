@@ -9,6 +9,7 @@
 #include <conio.h>
 #include "Uzytkownik.h"
 #include "Hulajnoga.h"
+#include <fstream>
 
 using namespace std;
 
