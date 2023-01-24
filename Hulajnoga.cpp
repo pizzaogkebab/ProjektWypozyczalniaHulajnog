@@ -7,15 +7,15 @@ using namespace  std;
 void Hulajnoga::prezentacja_hulajnogi() {
     cout << "========================="<<endl;
     cout << "Typ hulajnogi: " << typ_hulajnogi << endl;
-    cout << "Maksymalna predkosc pojazdu: " << predkosc << " km/h" << endl;
+    cout << "Maksymalna prędkość pojazdu: " << predkosc << " km/h" << endl;
     cout << "Maksymalna waga pasażera: " << waga << " kg" << endl;
 }
 
 void Hulajnoga::pokaz_hulajnoge()
 {
     Hulajnoga::prezentacja_hulajnogi();
-    cout << "Stan bateri pojazdu: " << stanBat << " %" <<endl;
-    cout << "Odleglosc od ciebie: " << odleglosc << " km" <<endl;
+    cout << "Stan baterii pojazdu: " << stanBat << " %" <<endl;
+    cout << "Odleglość od Ciebie: " << odleglosc << " km" <<endl;
     cout << "========================="<<endl;
 }
 

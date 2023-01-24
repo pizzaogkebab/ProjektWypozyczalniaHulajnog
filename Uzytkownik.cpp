@@ -47,11 +47,11 @@ void Uzytkownik::dodawanie_uzytkownika()
     string linia;
     bool nieuzytyLogin = false;
     cout << "REJESTRACJA NOWEGO KONTA"<<endl;
-    cout << "Podaj swoj email: ";
+    cout << "Podaj swój email: ";
     cin >> email;
-    cout <<"Podaj Imie: ";
+    cout <<"Podaj imię: ";
     cin >> imie;
-    cout << "Podaj Nazwisko: ";
+    cout << "Podaj nazwisko: ";
     cin >> nazwisko;
     //wprowadzenie loginu i jednoczesne sprawdzenie czy taki użytkownik już nie występuje
     while (true){
@@ -68,7 +68,7 @@ void Uzytkownik::dodawanie_uzytkownika()
             {
                 if(login == linia)
                 {
-                    cout << "Taki uzytkownik juz istnieje, wymysl inny login." << endl;
+                    cout << "Taki użytkownik już istnieje, wymyśl inny login." << endl;
                     nieuzytyLogin = false;
                     break;
                 }
@@ -84,7 +84,7 @@ void Uzytkownik::dodawanie_uzytkownika()
             break;
     }
 
-    cout << "Ustaw haslo: ";
+    cout << "Ustaw hasło: ";
     cin >> haslo;
 
     saldo = 0;
@@ -138,9 +138,9 @@ bool Uzytkownik::logowanie()
 
                 getline(plik,linia);
                 haslo = linia;
-                cout << "Uzytkownik: " << login<<endl;
+                cout << "Użytkownik: " << login<<endl;
                 do{
-                    cout << "Podaj haslo: ";
+                    cout << "Podaj hasło: ";
                     cin >> haslozklaw;
                 }while(Uzytkownik::hashowanie(haslozklaw) != haslo);
                 getline(plik,linia);
@@ -170,7 +170,7 @@ bool Uzytkownik::logowanie()
 
 void Uzytkownik::stan_konta()
 {
-    cout << "Aktualne saldo to: " << saldo << " zl "<<endl;
+    cout << "Aktualne saldo to: " << saldo << " zł "<<endl;
 }
 
 
@@ -227,13 +227,13 @@ void Uzytkownik::zmiana_salda() {
 
     void Uzytkownik::doladowanie(){
         string doladowanie;
-        cout << "Podaj kwote na jaka chcesz doladowac konto: ";
+        cout << "Podaj kwotę na jaką chcesz doładować konto: ";
         while (true) {
             cin >> doladowanie;
             if (sprawdz_doladowanie(doladowanie)) {
                 break;
             }
-            cout << "Podaj kwote doladowania jeszcze raz: ";
+            cout << "Podaj kwotę doładowania jeszcze raz: ";
         }
         saldo += stod(doladowanie);
         zmiana_salda();
@@ -244,19 +244,19 @@ void Uzytkownik::zmiana_salda() {
         string stare_haslo;
         string nowe_haslo;
         while(true) {
-            cout << "Podaj aktualne haslo: ";
+            cout << "Podaj aktualne hasło: ";
             cin >> stare_haslo;
             if(hashowanie(stare_haslo) != this -> haslo)
             {
-                cout << "Podales niepoprawne haslo"<<endl;
+                cout << "Podałeś niepoprawne hasło"<<endl;
             }
             else{
-                cout << "Podane haslo jest poprawne"<<endl<<endl;
+                cout << "Podane hasło jest poprawne"<<endl<<endl;
                 break;
             }
 
         }
-        cout << "Podaj nowe haslo:";
+        cout << "Podaj nowe hasło:";
         cin >> nowe_haslo;
 
         this -> haslo = hashowanie(nowe_haslo);
