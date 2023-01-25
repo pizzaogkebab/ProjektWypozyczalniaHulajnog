@@ -179,7 +179,7 @@ int main() {
                                 }
                                 double koszt_wyp = wsk->koszt(czas_wypozyczenia);
                                 cout << "Koszt wypożyczenia wynosi: " << koszt_wyp << endl;
-                                cout << "Porsze wpisac szesciocyfrowy numer BLIK: ";
+                                cout << "Porsze wpisac szesciocyfrowy kod BLIK: ";
                                 string blik;
                                 cin >> blik;
                                 if (sprawdz_blik(blik)) {
@@ -269,7 +269,7 @@ int main() {
                             if (wybor_menu_saldo == 2) {
                                 user_log.doladowanie();
                                 cout << "Doladowanie zakonczone pomyslnie";
-                                logs << "Uzytkownik: " << user_log.login << "doladowuje konto"<<endl;
+                                logs << "Uzytkownik: " << user_log.login << " doladowuje konto"<<endl;
                                 continue;
                             }
                             //wyjście do menu główngo
@@ -294,7 +294,7 @@ int main() {
                         switch (wybor_ustawienia) {
                             case '1': {
                                 user_log.zmiana_hasla();
-                                logs << "Uzytkownik: " << user_log.login << "zmienia haslo" <<endl;
+                                logs << "Uzytkownik: " << user_log.login << " zmienia haslo" <<endl;
                             }
                             case '9':{
                                 break;

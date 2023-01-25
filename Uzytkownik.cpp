@@ -256,7 +256,7 @@ void Uzytkownik::zmiana_salda() {
             }
 
         }
-        cout << "Podaj nowe hasło:";
+        cout << "Podaj nowe hasło: ";
         cin >> nowe_haslo;
 
         this -> haslo = hashowanie(nowe_haslo);
@@ -357,7 +357,7 @@ void Uzytkownik::zmiana_salda() {
     void Uzytkownik::anulowanie(){
         cout << "Wyzpozyczanie" << endl;
         cout << "Posiadasz już jedną wypożyczoną hulajnoge"<<endl;
-        cout << "Czy chcesz przedwcześnie zakończyć jej wypożyczenie? Stracisz wydane pieniądze.(y/n)" <<endl;
+        cout << "Czy chcesz przedwcześnie zakończyć jej wypożyczenie? Stracisz wydane pieniądze. (Y/N): " <<endl;
         char odp_wyb;
         cin >> odp_wyb;
         if(odp_wyb == 'Y' or odp_wyb == 'y'){
